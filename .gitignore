@@ -1,0 +1,15 @@
+.env
+.DS_Store
+# Java / Maven
+target/
+*.class
+# IDEs
+.idea/
+*.iml
+.vscode/
+# Node
+node_modules/
+.next/
+# Runtime files
+uploads/
+*.log
