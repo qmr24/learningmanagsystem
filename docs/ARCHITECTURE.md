@@ -18,17 +18,18 @@
 ## Key rules and where they are enforced
 | Rule | Enforcement |
 |---|---|
-| Max 20 per slot | `exam_slots.capacity` (default 20); booking runs in one transaction with `SELECT ... FOR UPDATE` on the slot row; `CHECK (booked_count <= capacity)` |
+| Max 20 per slot | `CHECK (capacity BETWEEN 1 AND 20)`; atomic `UPDATE exam_slots SET booked_count = booked_count+1 WHERE ... booked_count < capacity` in the booking transaction; `CHECK (booked_count <= capacity)`; drift view `v_slot_booking_drift` |
+| Slot belongs to booking's exam; attendance matches booking | composite foreign keys (see `docs/SCHEMA_REVIEW.md`) |
 | One booking per student per exam | unique `(examination_id, student_id, active_key)`; cancelled rows kept as history |
 | Student must be enrolled in exam's subject | `EnrollmentGuard` service, reused by resources, exams, bookings, announcements, results |
 | Students can't cancel/change bookings | no student endpoint exists; admin-only endpoints |
 | No duplicate attendance | unique `exam_attendance.booking_id` |
 | Duplicate applications | unique `(academic_year_id, open_email_key)`; rejected applications don't block reapplying |
-| Student ID `2027STU001` | `student_id_sequences` row locked on approval |
+| Student ID `2027STU001` | atomic `INSERT ... ON DUPLICATE KEY UPDATE` on `student_id_sequences` inside the approval transaction |
 | Published result edits | row to `exam_result_history` + `audit_logs` |
 | Teacher scope | `teacher_subjects` checked on every teacher endpoint |
 | Private files | random UUID `stored_name`; served only by an authorized streaming endpoint |
-| QR attendance | per-slot HMAC-signed token, short expiry, student must be logged in with a confirmed booking for that slot |
+| QR attendance | HMAC token with a key derived from `QR_MASTER_KEY` (env) + per-session salt, so no secret is stored in the DB; short expiry; student logged in with a confirmed booking for that slot |
 
 ## ERD
 ```mermaid

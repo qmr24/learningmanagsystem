@@ -1,5 +1,6 @@
 # Development checklist
 - [x] Phase 1: architecture, ERD, V1 schema, API plan, folder structure
+- [x] Phase 1 schema review applied (docs/SCHEMA_REVIEW.md); awaiting approval and MySQL run
 - [ ] Phase 2: backend foundation, auth, RBAC, error handling
 - [ ] Phase 3: applications, students, teachers, academic years, subjects, enrollment
 - [ ] Phase 4: learning materials
@@ -11,4 +12,4 @@
 - [ ] Phase 10: testing, security review, deployment, backups
 - [ ] Assignments (later migration)
 
-Not yet verified: V1 SQL has not been run against a real MySQL (none available in the authoring sandbox). It runs automatically in Phase 2 tests via Testcontainers.
+Not yet verified: V1 SQL has not been run against a real MySQL. Run step 6 of docs/SETUP.md. It will also run automatically in Phase 2 tests via Testcontainers.

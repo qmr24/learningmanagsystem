@@ -70,7 +70,7 @@ set -a; . ./.env; set +a
 SQL=backend/src/main/resources/db/migration/V1__core_schema.sql
 docker exec lms-mysql mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS lms_scratch; CREATE DATABASE lms_scratch CHARACTER SET utf8mb4;"
 docker exec -i lms-mysql mysql -uroot -p"$MYSQL_ROOT_PASSWORD" lms_scratch < "$SQL"
-docker exec lms-mysql mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -N -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='lms_scratch';"   # expect 32
+docker exec lms-mysql mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -N -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='lms_scratch' AND table_type='BASE TABLE';"   # expect 32 (plus 1 view)
 docker exec lms-mysql mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE lms_scratch;"
 ```
 A "Using a password on the command line" warning is normal. If you see `ERROR 1234 ...`, copy the full message to me.
