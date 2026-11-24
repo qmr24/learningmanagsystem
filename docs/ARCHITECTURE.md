@@ -13,6 +13,8 @@
 - Exams are **physical sittings**. The app handles scheduling, booking, attendance, staff-entered marks, results and progress. No online answering, so no answer/submission tables.
 - Academic year is never stored on students, exams or materials. It is derived via `subject -> academic_year`. Enrollment is `student -> subject`, so a new year adds rows and never overwrites old ones.
 - Assignments are built last and added by a later migration.
+- **One permanent student record and ID per person (confirmed).** New academic years add enrolments only; the ID keeps its first-year prefix.
+- **Result publishing is Admin/Super Admin only (confirmed).** Teachers enter marks as drafts for their own subjects.
 - Parents have no login; guardian contacts live in `student_guardians` and the application.
 
 ## Key rules and where they are enforced

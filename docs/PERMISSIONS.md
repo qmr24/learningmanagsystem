@@ -1,6 +1,8 @@
 # Permissions (seeded in V1)
 
 Permissions are *capabilities*. "Scoped" rules (teacher: own subjects via `teacher_subjects`; student: enrolled subjects and own records) are enforced in the service layer on top of these. Notifications need no permission (any logged-in user). Assignment permissions arrive with the Assignments migration.
+**Confirmed decisions:** (1) only Admin and Super Admin can publish results (`RESULT_PUBLISH`) or edit published results (`RESULT_EDIT_PUBLISHED`); teachers enter and update marks (`RESULT_ENTER`) for assigned subjects while results are drafts. (2) Students keep one permanent record; permissions never differ by academic year, only the data scope does.
+
 Super Admin has every permission except the student-self and teacher-dashboard ones, which have no meaning for that role. Super Admin can change the Admin/Teacher mappings through `ROLE_PERMISSION_MANAGE`.
 
 | Permission | Description | Super Admin | Admin | Teacher | Student |

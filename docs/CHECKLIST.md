@@ -1,6 +1,6 @@
 # Development checklist
 - [x] Phase 1: architecture, ERD, V1 schema, API plan, folder structure
-- [x] Phase 1 schema review applied (docs/SCHEMA_REVIEW.md); awaiting approval and MySQL run
+- [x] Phase 1 schema review applied (docs/SCHEMA_REVIEW.md); decisions confirmed (Option A students, admin-only result publishing); awaiting your MySQL test
 - [ ] Phase 2: backend foundation, auth, RBAC, error handling
 - [ ] Phase 3: applications, students, teachers, academic years, subjects, enrollment
 - [ ] Phase 4: learning materials

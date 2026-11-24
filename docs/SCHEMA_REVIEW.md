@@ -49,8 +49,15 @@ Admin move = decrement old + increment new, locking slots in ascending id order 
 6. Mark the application `APPROVED`.
 Email is sent after commit by an outbox worker, never inside the transaction. `students.application_id UNIQUE` and `student_code UNIQUE` stop a double approval even if two admins click at once.
 
-## C. Open decision
-**Returning students (A or B)** is still unanswered. Until you say otherwise I assume **A: one student record and ID for life, new enrolments per year**. The schema already supports A. For A, approving a later application for a known email adds enrolments and no new user. Option B (new ID per year) would need `students.email` and `users.email` uniqueness changed. Please confirm before Phase 3.
+## C. Confirmed decisions
+**Returning students: Option A (confirmed).** One permanent `students` row, `users` account and student ID per person, for life. Each academic year adds new `student_enrollments` rows; old years are never touched, so history is preserved.
+- The ID keeps the year of the student's *first* approved application (a student first approved in 2027 stays `2027STU001` when studying in 2028).
+- A later application is matched to the existing student by email (`users.email` is unique). Approval then adds enrolments for the new year's subjects and creates no new user, student or ID. A rejected-then-reapplied or duplicate application is still caught by the per-year email guard.
+- If the existing student is `INACTIVE` or `GRADUATED`, the approving admin must reactivate them in the same step; `SUSPENDED` students cannot be approved until unsuspended.
+- `students.application_id` means the *original* application only. Links from later applications to the student are recorded in `audit_logs` (no schema change, so your MySQL test of this version stays valid).
+- Reports and progress work per academic year (via subject) and across years from the same student row.
+
+**Result publishing (confirmed).** Only `ADMIN` and `SUPER_ADMIN` hold `RESULT_PUBLISH` and `RESULT_EDIT_PUBLISHED`. Teachers hold `RESULT_ENTER`: they can enter and update marks for their assigned subjects while results are `DRAFT`, but cannot publish, and cannot change a result once it is published (an admin must do it, audited in `exam_result_history` and `audit_logs`). The seeded permissions already matched this; no SQL change was needed.
 
 ## D. Validation status
 Checked with a script I wrote: all 32 tables parse, every FK target exists earlier and is a unique key, no CHECK/FK combination hits MySQL error 3823, every permission code is defined. **Not yet run on real MySQL.** Please run step 6 of `docs/SETUP.md`.
